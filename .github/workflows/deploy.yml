@@ -30,6 +30,13 @@ jobs:
         run: npm install
 
       - name: Build
+        env:
+          NEXT_PUBLIC_FIREBASE_API_KEY: AIzaSyBMzO14ALimQFpSGGkV7Ven6fRtABBxvc0
+          NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN: money-tracker-22d76.firebaseapp.com
+          NEXT_PUBLIC_FIREBASE_PROJECT_ID: money-tracker-22d76
+          NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET: money-tracker-22d76.firebasestorage.app
+          NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID: 857522441209
+          NEXT_PUBLIC_FIREBASE_APP_ID: 1:857522441209:web:1f1a99c662bc5464960b28
         run: npm run build
 
       - name: Upload artifact
