@@ -47,14 +47,14 @@ export default function IncomeForm() {
 
   return (
     <div className="max-w-2xl mx-auto">
-      <div className="bg-white dark:bg-slate-800 rounded-lg shadow-lg dark:shadow-slate-900/30 p-6 border border-gray-100 dark:border-slate-700">
-        <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">Add Income</h2>
+      <div className="bg-white dark:bg-slate-800 rounded-lg shadow-lg dark:shadow-slate-900/30 p-4 sm:p-6 border border-gray-100 dark:border-slate-700">
+        <h2 className="text-xl sm:text-2xl font-bold text-gray-900 dark:text-white mb-4 sm:mb-6">Add Income</h2>
 
         {/* Info Box */}
-        <div className="bg-blue-50 dark:bg-blue-900/20 border-l-4 border-blue-500 dark:border-blue-600 p-4 mb-6 rounded">
-          <div className="flex">
+        <div className="bg-blue-50 dark:bg-blue-900/20 border-l-4 border-blue-500 dark:border-blue-600 p-3 sm:p-4 mb-4 sm:mb-6 rounded">
+          <div className="flex gap-2 sm:gap-3">
             <div className="flex-shrink-0">
-              <svg className="h-5 w-5 text-blue-400 dark:text-blue-500" viewBox="0 0 20 20" fill="currentColor">
+              <svg className="h-4 w-4 sm:h-5 sm:w-5 text-blue-400 dark:text-blue-500" viewBox="0 0 20 20" fill="currentColor">
                 <path
                   fillRule="evenodd"
                   d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z"
@@ -62,8 +62,8 @@ export default function IncomeForm() {
                 />
               </svg>
             </div>
-            <div className="ml-3">
-              <p className="text-sm text-blue-700 dark:text-blue-300">
+            <div className="min-w-0 flex-1">
+              <p className="text-xs sm:text-sm text-blue-700 dark:text-blue-300">
                 <strong>Salary</strong> is your base income (₹1,01,000/month) - the foundation of your plan.
                 <br />
                 <strong>Commissions</strong> are tracked separately as bonus income.
@@ -75,22 +75,22 @@ export default function IncomeForm() {
         <form onSubmit={handleSubmit} className="space-y-6">
           {/* Income Type */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-3">Income Type *</label>
-            <div className="grid grid-cols-2 gap-4">
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2 sm:mb-3">Income Type *</label>
+            <div className="grid grid-cols-2 gap-2 sm:gap-4">
               <button
                 type="button"
                 onClick={() => setType('salary')}
-                className={`p-4 rounded-lg border-2 text-left transition-all ${
+                className={`p-3 sm:p-4 rounded-lg border-2 text-left transition-all ${
                   type === 'salary'
                     ? 'border-blue-500 dark:border-blue-600 bg-blue-50 dark:bg-blue-900/30'
                     : 'border-gray-200 dark:border-slate-600 bg-white dark:bg-slate-700/50 hover:border-gray-300 dark:hover:border-slate-500'
                 }`}
               >
-                <div className="flex items-center space-x-3">
-                  <span className="text-2xl">💼</span>
-                  <div>
-                    <p className="font-medium text-gray-900 dark:text-white">Salary</p>
-                    <p className="text-xs text-gray-500 dark:text-gray-400">Base monthly income</p>
+                <div className="flex items-center space-x-2 sm:space-x-3">
+                  <span className="text-xl sm:text-2xl flex-shrink-0">💼</span>
+                  <div className="min-w-0 flex-1">
+                    <p className="font-medium text-gray-900 dark:text-white text-sm sm:text-base">Salary</p>
+                    <p className="text-xs text-gray-500 dark:text-gray-400 truncate">Base monthly income</p>
                   </div>
                 </div>
               </button>
@@ -98,17 +98,17 @@ export default function IncomeForm() {
               <button
                 type="button"
                 onClick={() => setType('commission')}
-                className={`p-4 rounded-lg border-2 text-left transition-all ${
+                className={`p-3 sm:p-4 rounded-lg border-2 text-left transition-all ${
                   type === 'commission'
                     ? 'border-blue-500 dark:border-blue-600 bg-blue-50 dark:bg-blue-900/30'
                     : 'border-gray-200 dark:border-slate-600 bg-white dark:bg-slate-700/50 hover:border-gray-300 dark:hover:border-slate-500'
                 }`}
               >
-                <div className="flex items-center space-x-3">
-                  <span className="text-2xl">💰</span>
-                  <div>
-                    <p className="font-medium text-gray-900 dark:text-white">Commission</p>
-                    <p className="text-xs text-gray-500 dark:text-gray-400">Bonus income</p>
+                <div className="flex items-center space-x-2 sm:space-x-3">
+                  <span className="text-xl sm:text-2xl flex-shrink-0">💰</span>
+                  <div className="min-w-0 flex-1">
+                    <p className="font-medium text-gray-900 dark:text-white text-sm sm:text-base">Commission</p>
+                    <p className="text-xs text-gray-500 dark:text-gray-400 truncate">Bonus income</p>
                   </div>
                 </div>
               </button>

@@ -156,21 +156,21 @@ export default function ExpenseForm() {
 
   return (
     <div className="max-w-2xl mx-auto">
-      <div className="bg-white dark:bg-slate-800 rounded-lg shadow-lg dark:shadow-slate-900/30 p-6 border border-gray-100 dark:border-slate-700">
-        <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">Add Expense</h2>
+      <div className="bg-white dark:bg-slate-800 rounded-lg shadow-lg dark:shadow-slate-900/30 p-4 sm:p-6 border border-gray-100 dark:border-slate-700">
+        <h2 className="text-xl sm:text-2xl font-bold text-gray-900 dark:text-white mb-4 sm:mb-6">Add Expense</h2>
 
         {/* Current Budget Status */}
-        <div className="bg-gray-50 dark:bg-slate-700/50 rounded-lg p-4 mb-6 border border-gray-100 dark:border-slate-600">
-          <div className="flex justify-between items-center">
-            <div>
-              <p className="text-sm text-gray-600 dark:text-gray-300">This Month's Budget</p>
-              <p className="text-2xl font-bold text-gray-900 dark:text-white">
+        <div className="bg-gray-50 dark:bg-slate-700/50 rounded-lg p-3 sm:p-4 mb-4 sm:mb-6 border border-gray-100 dark:border-slate-600">
+          <div className="flex justify-between items-center gap-3">
+            <div className="min-w-0 flex-1">
+              <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-300">This Month's Budget</p>
+              <p className="text-lg sm:text-2xl font-bold text-gray-900 dark:text-white truncate">
                 ₹{currentSpent.toLocaleString('en-IN')} / ₹{monthlyBudget.toLocaleString('en-IN')}
               </p>
             </div>
-            <div className="text-right">
-              <p className="text-sm text-gray-600 dark:text-gray-300">Remaining</p>
-              <p className={`text-2xl font-bold ${remaining > 0 ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400'}`}>
+            <div className="text-right flex-shrink-0">
+              <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-300">Remaining</p>
+              <p className={`text-lg sm:text-2xl font-bold ${remaining > 0 ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400'}`}>
                 ₹{remaining.toLocaleString('en-IN')}
               </p>
             </div>
@@ -200,26 +200,26 @@ export default function ExpenseForm() {
 
           {/* Category */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-3">
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2 sm:mb-3">
               Category *
             </label>
-            <div className="grid grid-cols-2 gap-3">
+            <div className="grid grid-cols-2 sm:grid-cols-2 gap-2 sm:gap-3">
               {(['food', 'shopping', 'utility', 'travel', 'gambling'] as ExpenseCategory[]).map((cat) => (
                 <button
                   key={cat}
                   type="button"
                   onClick={() => setCategory(cat)}
-                  className={`p-4 rounded-lg border-2 text-left transition-all ${
+                  className={`p-3 sm:p-4 rounded-lg border-2 text-left transition-all ${
                     category === cat
                       ? 'border-blue-500 dark:border-blue-600 bg-blue-50 dark:bg-blue-900/30'
                       : 'border-gray-200 dark:border-slate-600 bg-white dark:bg-slate-700/50 hover:border-gray-300 dark:hover:border-slate-500'
                   }`}
                 >
-                  <div className="flex items-center space-x-3">
-                    <span className="text-2xl">{getCategoryIcon(cat)}</span>
-                    <div>
-                      <p className="font-medium text-gray-900 dark:text-white capitalize">{cat}</p>
-                      <p className="text-xs text-gray-500 dark:text-gray-400">
+                  <div className="flex items-center space-x-2 sm:space-x-3">
+                    <span className="text-xl sm:text-2xl flex-shrink-0">{getCategoryIcon(cat)}</span>
+                    <div className="min-w-0 flex-1">
+                      <p className="font-medium text-gray-900 dark:text-white capitalize text-sm sm:text-base truncate">{cat}</p>
+                      <p className="text-xs text-gray-500 dark:text-gray-400 truncate">
                         ₹{categorySpending[cat].toLocaleString('en-IN')} spent
                       </p>
                     </div>
@@ -283,12 +283,12 @@ export default function ExpenseForm() {
 
         {/* Online Gambling Warning Modal */}
         {showOnlineGamblingWarning && (
-          <div className="fixed inset-0 bg-black/70 dark:bg-black/80 flex items-center justify-center p-4 z-50">
-            <div className="bg-white dark:bg-slate-800 rounded-lg p-6 max-w-md border border-gray-200 dark:border-slate-700">
+          <div className="fixed inset-0 bg-black/70 dark:bg-black/80 flex items-center justify-center p-3 sm:p-4 z-50">
+            <div className="bg-white dark:bg-slate-800 rounded-lg p-5 sm:p-6 max-w-md w-full border border-gray-200 dark:border-slate-700">
               <div className="text-center">
-                <div className="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-red-100 dark:bg-red-900/30 mb-4">
+                <div className="mx-auto flex items-center justify-center h-10 w-10 sm:h-12 sm:w-12 rounded-full bg-red-100 dark:bg-red-900/30 mb-3 sm:mb-4">
                   <svg
-                    className="h-6 w-6 text-red-600 dark:text-red-400"
+                    className="h-5 w-5 sm:h-6 sm:w-6 text-red-600 dark:text-red-400"
                     fill="none"
                     viewBox="0 0 24 24"
                     stroke="currentColor"
@@ -301,8 +301,8 @@ export default function ExpenseForm() {
                     />
                   </svg>
                 </div>
-                <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">DANGER ZONE</h3>
-                <p className="text-sm text-gray-600 dark:text-gray-300 mb-6">
+                <h3 className="text-base sm:text-lg font-semibold text-gray-900 dark:text-white mb-2">DANGER ZONE</h3>
+                <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-300 mb-4 sm:mb-6">
                   Online gambling is in your NO-GO zone. This is the loophole you wanted to avoid. Step
                   back and think about your ₹8L goal.
                 </p>
@@ -312,7 +312,7 @@ export default function ExpenseForm() {
                     setAmount('');
                     setNotes('');
                   }}
-                  className="w-full bg-red-600 hover:bg-red-700 dark:bg-red-700 dark:hover:bg-red-600 text-white font-medium py-2 px-4 rounded-lg transition-colors"
+                  className="w-full bg-red-600 hover:bg-red-700 dark:bg-red-700 dark:hover:bg-red-600 text-white font-medium py-2.5 sm:py-2 px-4 rounded-lg transition-colors text-sm sm:text-base"
                 >
                   You're right, let me step back
                 </button>

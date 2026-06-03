@@ -136,10 +136,10 @@ export default function Settings() {
   const totalDiff = bankDiff + invDiff - ccDiff;
 
   return (
-    <div className="max-w-4xl mx-auto space-y-6">
+    <div className="max-w-4xl mx-auto space-y-4 sm:space-y-6">
       {/* Budget Settings */}
-      <div className="bg-white dark:bg-slate-800 rounded-lg shadow-lg dark:shadow-slate-900/30 p-6 border border-gray-100 dark:border-slate-700">
-        <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">Budget Settings</h2>
+      <div className="bg-white dark:bg-slate-800 rounded-lg shadow-lg dark:shadow-slate-900/30 p-4 sm:p-6 border border-gray-100 dark:border-slate-700">
+        <h2 className="text-xl sm:text-2xl font-bold text-gray-900 dark:text-white mb-4 sm:mb-6">Budget Settings</h2>
 
         <div className="space-y-4">
           <div>
@@ -189,11 +189,11 @@ export default function Settings() {
       </div>
 
       {/* Fixed Expenses */}
-      <div className="bg-white dark:bg-slate-800 rounded-lg shadow-lg dark:shadow-slate-900/30 p-6 border border-gray-100 dark:border-slate-700">
-        <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">Fixed Monthly Expenses</h2>
+      <div className="bg-white dark:bg-slate-800 rounded-lg shadow-lg dark:shadow-slate-900/30 p-4 sm:p-6 border border-gray-100 dark:border-slate-700">
+        <h2 className="text-xl sm:text-2xl font-bold text-gray-900 dark:text-white mb-4 sm:mb-6">Fixed Monthly Expenses</h2>
 
         <div className="space-y-4">
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
             <div>
               <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Rent</label>
               <div className="relative">
@@ -258,9 +258,9 @@ export default function Settings() {
       </div>
 
       {/* Account Reconciliation */}
-      <div className="bg-white dark:bg-slate-800 rounded-lg shadow-lg dark:shadow-slate-900/30 p-6 border border-gray-100 dark:border-slate-700">
-        <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">Account Reconciliation</h2>
-        <p className="text-sm text-gray-600 dark:text-gray-300 mb-6">
+      <div className="bg-white dark:bg-slate-800 rounded-lg shadow-lg dark:shadow-slate-900/30 p-4 sm:p-6 border border-gray-100 dark:border-slate-700">
+        <h2 className="text-xl sm:text-2xl font-bold text-gray-900 dark:text-white mb-3 sm:mb-4">Account Reconciliation</h2>
+        <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-300 mb-4 sm:mb-6">
           Enter your actual account balances to ensure everything is tracked accurately
         </p>
 
@@ -269,8 +269,8 @@ export default function Settings() {
             <label htmlFor="actualBank" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
               Actual Bank Balance
             </label>
-            <div className="flex items-center space-x-3">
-              <div className="relative flex-1">
+            <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2 sm:gap-3">
+              <div className="relative flex-1 w-full sm:w-auto">
                 <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500 dark:text-gray-400">₹</span>
                 <input
                   type="number"
@@ -281,7 +281,7 @@ export default function Settings() {
                   placeholder="0"
                 />
               </div>
-              <div className="text-sm text-gray-500 dark:text-gray-400">
+              <div className="text-xs sm:text-sm text-gray-500 dark:text-gray-400 whitespace-nowrap">
                 App thinks: ₹{expectedBankBalance.toLocaleString('en-IN')}
               </div>
             </div>
@@ -291,8 +291,8 @@ export default function Settings() {
             <label htmlFor="actualInvestments" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
               Actual Investments Value
             </label>
-            <div className="flex items-center space-x-3">
-              <div className="relative flex-1">
+            <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2 sm:gap-3">
+              <div className="relative flex-1 w-full sm:w-auto">
                 <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500 dark:text-gray-400">₹</span>
                 <input
                   type="number"
@@ -303,7 +303,7 @@ export default function Settings() {
                   placeholder="0"
                 />
               </div>
-              <div className="text-sm text-gray-500 dark:text-gray-400">
+              <div className="text-xs sm:text-sm text-gray-500 dark:text-gray-400 whitespace-nowrap">
                 App thinks: ₹{expectedInvestments.toLocaleString('en-IN')}
               </div>
             </div>
@@ -313,8 +313,8 @@ export default function Settings() {
             <label htmlFor="actualCC" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
               Actual Credit Card Debt
             </label>
-            <div className="flex items-center space-x-3">
-              <div className="relative flex-1">
+            <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2 sm:gap-3">
+              <div className="relative flex-1 w-full sm:w-auto">
                 <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500 dark:text-gray-400">₹</span>
                 <input
                   type="number"
@@ -325,7 +325,7 @@ export default function Settings() {
                   placeholder="0"
                 />
               </div>
-              <div className="text-sm text-gray-500 dark:text-gray-400">
+              <div className="text-xs sm:text-sm text-gray-500 dark:text-gray-400 whitespace-nowrap">
                 App thinks: ₹{expectedCCDebt.toLocaleString('en-IN')}
               </div>
             </div>
