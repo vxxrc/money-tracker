@@ -29,21 +29,31 @@ export default function Dashboard() {
           const data = settingsSnap.data();
           setMonthlyBudget(data.monthlyBudget || 12000);
           setNetWorthGoal(data.netWorthGoal || 800000);
-          setBankBalance(data.bankBalance || 100000);
-          setInvestmentsValue(data.investmentsValue || 250000);
-          setCreditCardDebt(data.creditCardDebt || 55000);
-          setNetWorth(data.netWorth || 295000);
+          setBankBalance(data.bankBalance || 0);
+          setInvestmentsValue(data.investmentsValue || 0);
+          setCreditCardDebt(data.creditCardDebt || 0);
+          setNetWorth(data.netWorth || 0);
         } else {
-          // Initialize with default values for new users
+          // Initialize with zero values for new users - they should set up in Settings
           await setDoc(settingsRef, {
             monthlyBudget: 12000,
             netWorthGoal: 800000,
-            bankBalance: 100000,
-            investmentsValue: 250000,
-            creditCardDebt: 55000,
-            netWorth: 295000,
-            originalCCDebt: 55000,
+            bankBalance: 0,
+            investmentsValue: 0,
+            creditCardDebt: 0,
+            netWorth: 0,
+            originalCCDebt: 0,
+            rent: 0,
+            electricity: 0,
+            maid: 0,
+            sip: 0,
           });
+          setMonthlyBudget(12000);
+          setNetWorthGoal(800000);
+          setBankBalance(0);
+          setInvestmentsValue(0);
+          setCreditCardDebt(0);
+          setNetWorth(0);
         }
       } catch (error) {
         console.error('Error loading settings:', error);
@@ -103,8 +113,30 @@ export default function Dashboard() {
     return now.toLocaleDateString('en-IN', { month: 'long', year: 'numeric' });
   };
 
+  // Check if user needs to set up their account
+  const needsSetup = netWorth === 0 && bankBalance === 0 && investmentsValue === 0;
+
   return (
     <div className="space-y-6">
+      {/* Setup Prompt */}
+      {needsSetup && (
+        <div className="bg-blue-50 dark:bg-blue-900/20 border-l-4 border-blue-500 dark:border-blue-600 p-4 sm:p-5 rounded">
+          <div className="flex gap-3">
+            <div className="flex-shrink-0">
+              <svg className="h-5 w-5 sm:h-6 sm:w-6 text-blue-400 dark:text-blue-500" viewBox="0 0 20 20" fill="currentColor">
+                <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clipRule="evenodd" />
+              </svg>
+            </div>
+            <div>
+              <h3 className="text-sm sm:text-base font-medium text-blue-800 dark:text-blue-300">Welcome! Set up your account</h3>
+              <p className="text-xs sm:text-sm text-blue-700 dark:text-blue-400 mt-1">
+                Go to <strong>Settings</strong> and use the <strong>Account Reconciliation</strong> section to enter your actual bank balance, investments, and credit card debt.
+              </p>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* Month Header */}
       <div className="bg-white dark:bg-slate-800 rounded-lg shadow-lg dark:shadow-slate-900/30 p-6 border border-gray-100 dark:border-slate-700">
         <h2 className="text-xl font-semibold text-gray-900 dark:text-white">{getCurrentMonth()} (Demo Month)</h2>
