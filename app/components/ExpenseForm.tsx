@@ -1,27 +1,84 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { collection, addDoc, query, where, onSnapshot, doc, getDoc } from 'firebase/firestore';
+import { db } from '@/lib/firebase';
+import { useAuth } from '../context/AuthContext';
 import type { ExpenseCategory } from '@/lib/types';
 
 export default function ExpenseForm() {
+  const { user } = useAuth();
   const [amount, setAmount] = useState('');
   const [category, setCategory] = useState<ExpenseCategory>('food');
   const [notes, setNotes] = useState('');
   const [showOnlineGamblingWarning, setShowOnlineGamblingWarning] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
-
-  // Mock data - will connect to Firebase later
-  const monthlyBudget = 12000;
-  const currentSpent = 0;
-  const categorySpending = {
+  const [monthlyBudget, setMonthlyBudget] = useState(12000);
+  const [currentSpent, setCurrentSpent] = useState(0);
+  const [categorySpending, setCategorySpending] = useState({
     food: 0,
     shopping: 0,
     utility: 0,
     travel: 0,
     gambling: 0,
-  };
+  });
 
-  const handleSubmit = (e: React.FormEvent) => {
+  // Load monthly budget
+  useEffect(() => {
+    if (!user) return;
+
+    const loadBudget = async () => {
+      const settingsRef = doc(db, 'users', user.uid, 'data', 'settings');
+      const settingsSnap = await getDoc(settingsRef);
+      if (settingsSnap.exists()) {
+        setMonthlyBudget(settingsSnap.data().monthlyBudget || 12000);
+      }
+    };
+
+    loadBudget();
+  }, [user]);
+
+  // Load current month's expenses
+  useEffect(() => {
+    if (!user) return;
+
+    const now = new Date();
+    const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
+    const endOfMonth = new Date(now.getFullYear(), now.getMonth() + 1, 0, 23, 59, 59);
+
+    const expensesRef = collection(db, 'users', user.uid, 'expenses');
+    const q = query(
+      expensesRef,
+      where('date', '>=', startOfMonth),
+      where('date', '<=', endOfMonth)
+    );
+
+    const unsubscribe = onSnapshot(q, (snapshot) => {
+      let total = 0;
+      const catSpending: any = {
+        food: 0,
+        shopping: 0,
+        utility: 0,
+        travel: 0,
+        gambling: 0,
+      };
+
+      snapshot.docs.forEach((doc) => {
+        const data = doc.data();
+        total += data.amount || 0;
+        if (data.category && catSpending[data.category] !== undefined) {
+          catSpending[data.category] += data.amount || 0;
+        }
+      });
+
+      setCurrentSpent(total);
+      setCategorySpending(catSpending);
+    });
+
+    return unsubscribe;
+  }, [user]);
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
     const amountNum = parseFloat(amount);
@@ -36,21 +93,27 @@ export default function ExpenseForm() {
       return;
     }
 
-    // TODO: Save to Firebase
-    console.log('Saving expense:', {
-      amount: amountNum,
-      category,
-      notes,
-      date: new Date(),
-    });
+    try {
+      // Save to Firestore
+      await addDoc(collection(db, 'users', user!.uid, 'expenses'), {
+        amount: amountNum,
+        category,
+        notes,
+        date: new Date(),
+        createdAt: new Date(),
+      });
 
-    // Show success message
-    setShowSuccess(true);
-    setTimeout(() => setShowSuccess(false), 3000);
+      // Show success message
+      setShowSuccess(true);
+      setTimeout(() => setShowSuccess(false), 3000);
 
-    // Reset form
-    setAmount('');
-    setNotes('');
+      // Reset form
+      setAmount('');
+      setNotes('');
+    } catch (error) {
+      console.error('Error saving expense:', error);
+      alert('Failed to save expense. Please try again.');
+    }
   };
 
   const remaining = monthlyBudget - currentSpent;

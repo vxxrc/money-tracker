@@ -1,15 +1,19 @@
 'use client';
 
 import { useState } from 'react';
+import { collection, addDoc } from 'firebase/firestore';
+import { db } from '@/lib/firebase';
+import { useAuth } from '../context/AuthContext';
 import type { IncomeType } from '@/lib/types';
 
 export default function IncomeForm() {
+  const { user } = useAuth();
   const [amount, setAmount] = useState('');
   const [type, setType] = useState<IncomeType>('salary');
   const [notes, setNotes] = useState('');
   const [showSuccess, setShowSuccess] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
     const amountNum = parseFloat(amount);
@@ -18,21 +22,27 @@ export default function IncomeForm() {
       return;
     }
 
-    // TODO: Save to Firebase
-    console.log('Saving income:', {
-      amount: amountNum,
-      type,
-      notes,
-      date: new Date(),
-    });
+    try {
+      // Save to Firestore
+      await addDoc(collection(db, 'users', user!.uid, 'income'), {
+        amount: amountNum,
+        type,
+        notes,
+        date: new Date(),
+        createdAt: new Date(),
+      });
 
-    // Show success message
-    setShowSuccess(true);
-    setTimeout(() => setShowSuccess(false), 3000);
+      // Show success message
+      setShowSuccess(true);
+      setTimeout(() => setShowSuccess(false), 3000);
 
-    // Reset form
-    setAmount('');
-    setNotes('');
+      // Reset form
+      setAmount('');
+      setNotes('');
+    } catch (error) {
+      console.error('Error saving income:', error);
+      alert('Failed to save income. Please try again.');
+    }
   };
 
   return (

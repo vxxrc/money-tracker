@@ -1,16 +1,92 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { doc, getDoc, setDoc, collection, query, where, onSnapshot } from 'firebase/firestore';
+import { db } from '@/lib/firebase';
+import { useAuth } from '../context/AuthContext';
 
 export default function Dashboard() {
-  // Mock data for now - will connect to Firebase later
-  const [monthlyBudget] = useState(12000);
-  const [spent] = useState(0);
-  const [netWorth] = useState(295000);
-  const [netWorthGoal] = useState(800000);
-  const [bankBalance] = useState(100000);
-  const [investmentsValue] = useState(250000);
-  const [creditCardDebt] = useState(55000);
+  const { user } = useAuth();
+  const [monthlyBudget, setMonthlyBudget] = useState(12000);
+  const [spent, setSpent] = useState(0);
+  const [netWorth, setNetWorth] = useState(295000);
+  const [netWorthGoal, setNetWorthGoal] = useState(800000);
+  const [bankBalance, setBankBalance] = useState(100000);
+  const [investmentsValue, setInvestmentsValue] = useState(250000);
+  const [creditCardDebt, setCreditCardDebt] = useState(55000);
+  const [loading, setLoading] = useState(true);
+
+  // Load user settings from Firestore
+  useEffect(() => {
+    if (!user) return;
+
+    const loadSettings = async () => {
+      try {
+        const settingsRef = doc(db, 'users', user.uid, 'data', 'settings');
+        const settingsSnap = await getDoc(settingsRef);
+
+        if (settingsSnap.exists()) {
+          const data = settingsSnap.data();
+          setMonthlyBudget(data.monthlyBudget || 12000);
+          setNetWorthGoal(data.netWorthGoal || 800000);
+          setBankBalance(data.bankBalance || 100000);
+          setInvestmentsValue(data.investmentsValue || 250000);
+          setCreditCardDebt(data.creditCardDebt || 55000);
+          setNetWorth(data.netWorth || 295000);
+        } else {
+          // Initialize with default values for new users
+          await setDoc(settingsRef, {
+            monthlyBudget: 12000,
+            netWorthGoal: 800000,
+            bankBalance: 100000,
+            investmentsValue: 250000,
+            creditCardDebt: 55000,
+            netWorth: 295000,
+            originalCCDebt: 55000,
+          });
+        }
+      } catch (error) {
+        console.error('Error loading settings:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadSettings();
+  }, [user]);
+
+  // Load current month's expenses
+  useEffect(() => {
+    if (!user) return;
+
+    const now = new Date();
+    const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
+    const endOfMonth = new Date(now.getFullYear(), now.getMonth() + 1, 0, 23, 59, 59);
+
+    const expensesRef = collection(db, 'users', user.uid, 'expenses');
+    const q = query(
+      expensesRef,
+      where('date', '>=', startOfMonth),
+      where('date', '<=', endOfMonth)
+    );
+
+    const unsubscribe = onSnapshot(q, (snapshot) => {
+      const total = snapshot.docs.reduce((sum, doc) => {
+        return sum + (doc.data().amount || 0);
+      }, 0);
+      setSpent(total);
+    });
+
+    return unsubscribe;
+  }, [user]);
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center p-12">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+      </div>
+    );
+  }
 
   const remaining = monthlyBudget - spent;
   const spentPercentage = (spent / monthlyBudget) * 100;

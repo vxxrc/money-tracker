@@ -5,11 +5,31 @@ import Dashboard from './components/Dashboard';
 import ExpenseForm from './components/ExpenseForm';
 import IncomeForm from './components/IncomeForm';
 import Settings from './components/Settings';
+import Auth from './components/Auth';
 import { useTheme } from './context/ThemeContext';
+import { useAuth } from './context/AuthContext';
 
 export default function Home() {
   const [activeTab, setActiveTab] = useState<'dashboard' | 'expense' | 'income' | 'settings'>('dashboard');
   const { isDark, toggleTheme } = useTheme();
+  const { user, loading, signOut } = useAuth();
+
+  // Show loading state
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gray-50 dark:bg-slate-900 flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
+          <p className="text-gray-600 dark:text-gray-400">Loading...</p>
+        </div>
+      </div>
+    );
+  }
+
+  // Show Auth component if not logged in
+  if (!user) {
+    return <Auth />;
+  }
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-slate-900">
@@ -21,22 +41,35 @@ export default function Home() {
               <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Money Tracker</h1>
               <p className="text-sm text-gray-600 dark:text-gray-400">Your financial companion to ₹8L</p>
             </div>
-            {/* Dark Mode Toggle */}
-            <button
-              onClick={toggleTheme}
-              className="p-2 rounded-lg bg-gray-100 dark:bg-slate-700 hover:bg-gray-200 dark:hover:bg-slate-600 transition-colors"
-              aria-label="Toggle dark mode"
-            >
-              {isDark ? (
-                <svg className="w-6 h-6 text-yellow-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
-                </svg>
-              ) : (
-                <svg className="w-6 h-6 text-gray-700" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
-                </svg>
-              )}
-            </button>
+            <div className="flex items-center gap-2">
+              {/* User Email */}
+              <span className="text-sm text-gray-600 dark:text-gray-400 mr-2">
+                {user.email}
+              </span>
+              {/* Dark Mode Toggle */}
+              <button
+                onClick={toggleTheme}
+                className="p-2 rounded-lg bg-gray-100 dark:bg-slate-700 hover:bg-gray-200 dark:hover:bg-slate-600 transition-colors"
+                aria-label="Toggle dark mode"
+              >
+                {isDark ? (
+                  <svg className="w-6 h-6 text-yellow-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
+                  </svg>
+                ) : (
+                  <svg className="w-6 h-6 text-gray-700" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+                  </svg>
+                )}
+              </button>
+              {/* Logout Button */}
+              <button
+                onClick={signOut}
+                className="px-4 py-2 text-sm font-medium text-white bg-red-600 hover:bg-red-700 dark:bg-red-700 dark:hover:bg-red-600 rounded-lg transition-colors"
+              >
+                Logout
+              </button>
+            </div>
           </div>
         </div>
       </header>
